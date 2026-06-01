@@ -47,16 +47,15 @@ body {
 .banner-scroll {
     display: inline-block;
     white-space: nowrap;
-    animation: scrollBanner 25s linear infinite;
+    animation: scrollBanner 20s linear infinite;
     font-weight: 700;
     font-size: 0.95rem;
-    padding-left: 100vw;
     direction: ltr;
 }
 
 @keyframes scrollBanner {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
 }
 
 body.has-banner .navbar { top: 40px; }
