@@ -1057,6 +1057,63 @@ html[dir="rtl"] .pdp-image { border-radius: 0 20px 20px 0; }
     font-size: 1.05rem !important;
 }
 
+/* ===== Related Products in PDP ===== */
+.pdp-related {
+    border-top: 1px solid var(--primary-light);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.pdp-related h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--text);
+}
+
+.pdp-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+}
+
+.pdp-related-item {
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--primary-light);
+    transition: var(--transition);
+}
+
+.pdp-related-item:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.pdp-related-item img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+}
+
+.pdp-related-item .related-info {
+    padding: 8px;
+}
+
+.pdp-related-item .related-info p {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pdp-related-item .related-info span {
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-weight: 700;
+}
+
 /* ===== Delivery Option in Cart ===== */
 .cart-delivery-option {
     margin-bottom: 15px;

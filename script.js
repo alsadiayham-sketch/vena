@@ -636,6 +636,31 @@ function openPDP(productId) {
 
     document.getElementById('pdpModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    renderRelatedProducts(product);
+}
+
+function renderRelatedProducts(product) {
+    var container = document.getElementById('pdpRelated');
+    var grid = document.getElementById('pdpRelatedGrid');
+    if (!container || !grid) return;
+
+    var related = products.filter(function (p) {
+        if (p.id === product.id) return false;
+        return p.category === product.category || p.brand === product.brand;
+    }).slice(0, 4);
+
+    if (related.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+
+    grid.innerHTML = related.map(function (p) {
+        var price = p.sizes && p.sizes.length > 0 ? p.sizes[0].price : 0;
+        return '<div class="pdp-related-item" onclick="openPDP(\'' + p.id + '\')">' +
+            '<img src="' + p.image + '" alt="' + p.name + '" onerror="this.src=\'' + FALLBACK_IMAGE + '\'">' +
+            '<div class="related-info"><p>' + p.name + '</p><span>₪' + price + '</span></div></div>';
+    }).join('');
+    container.style.display = 'block';
 }
 
 function renderPDPSizeOptions() {
