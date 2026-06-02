@@ -1,4 +1,4 @@
-﻿var ADMIN_USER = 'vena';
+var ADMIN_USER = 'vena';
 var ADMIN_PASS = '5555';
 var FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27 viewBox=%270 0 300 300%27%3E%3Crect fill=%27%23f8f4f0%27 width=%27300%27 height=%27300%27/%3E%3Ctext fill=%27%23c9a96e%27 font-family=%27Arial%27 font-size=%2718%27 x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27%3EVena Store%3C/text%3E%3C/svg%3E";
 
@@ -117,7 +117,7 @@ function subscribeToCollections() {
     unsubscribers = [];
 
     unsubscribers.push(db.collection('products').onSnapshot(function (snapshot) {
-        products = snapshot.docs.map(function (docSnap) { return normalizeProduct(docSnap.data()); }).sort(function (a, b) { return a.id - b.id; });
+        products = snapshot.docs.map(function (docSnap) { var d = docSnap.data(); d.id = docSnap.id; return normalizeProduct(d); });
         adminReady.products = true;
         renderProductsTable();
         renderDiscountValueOptions();
@@ -183,7 +183,7 @@ function renderProductsTable() {
     }
 
     tbody.innerHTML = products.map(function (product) {
-        return '<tr><td><input type="checkbox" class="product-select" value="' + product.id + '" onchange="updateBulkBar()"></td><td><img src="' + product.image + '" alt="' + product.name + '" onerror="this.src=\'' + FALLBACK_IMAGE + '\'"></td><td>' + product.name + '</td><td>' + product.brand + '</td><td>' + product.category + '</td><td>' + formatSizes(product) + '</td><td>' + formatPrices(product) + '</td><td>' + (product.discount ? product.discount + '%' : '-') + '</td><td><span class="status-tag ' + (product.status || 'normal') + '">' + statusLabels[product.status || 'normal'] + '</span></td><td class="actions"><button class="btn-edit" onclick="editProduct(' + product.id + ')">تعديل</button><button class="btn-delete" onclick="deleteProduct(' + product.id + ')">حذف</button></td></tr>';
+        return '<tr><td><input type="checkbox" class="product-select" value="' + product.id + '" onchange="updateBulkBar()"></td><td><img src="' + product.image + '" alt="' + product.name + '" onerror="this.src=\'' + FALLBACK_IMAGE + '\'"></td><td>' + product.name + '</td><td>' + product.brand + '</td><td>' + product.category + '</td><td>' + formatSizes(product) + '</td><td>' + formatPrices(product) + '</td><td>' + (product.discount ? product.discount + '%' : '-') + '</td><td><span class="status-tag ' + (product.status || 'normal') + '">' + statusLabels[product.status || 'normal'] + '</span></td><td class="actions"><button class="btn-edit" onclick="editProduct('' + product.id + '')">تعديل</button><button class="btn-delete" onclick="deleteProduct('' + product.id + '')">حذف</button></td></tr>';
     }).join('');
     updateBulkBar();
 }
@@ -192,7 +192,7 @@ function getSelectedProductIds() {
     var checkboxes = document.querySelectorAll('.product-select:checked');
     var ids = [];
     for (var i = 0; i < checkboxes.length; i++) {
-        ids.push(Number(checkboxes[i].value));
+        ids.push(checkboxes[i].value);
     }
     return ids;
 }
@@ -326,7 +326,7 @@ async function saveProduct(event) {
     var sizes = collectSizes();
     if (!sizes.length) return alert('أضيفي حجماً واحداً على الأقل مع السعر.');
 
-    var nextId = id ? parseInt(id, 10) : (products.length ? Math.max.apply(null, products.map(function (entry) { return entry.id; })) + 1 : 1);
+    var nextId = id ? id : 'product_' + Date.now();
 
     // Handle image upload
     var imageUrl = document.getElementById('productImage').value.trim();
